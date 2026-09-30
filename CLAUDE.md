@@ -58,7 +58,7 @@ histórico: se conserva solo en las secciones de historia.
 **Estado de la migración:** el código, el binario, los mensajes, los archivos del contrato y el
 algoritmo del digest ya dicen `pactlock` (pasos 1 a 5 del ADR 0001). Faltan el paso 6, que hace
 el usuario (renombrar el repo en GitHub y mover la carpeta), y la comprobación final con `grep`
-del paso 7, que además espera el borrado de `src/legacy/` (fase 0-A).
+del paso 7.
 
 Reglas de la migración:
 
@@ -74,8 +74,9 @@ Reglas de la migración:
 
 Un buscador e instalador de skills. Esa tesis se abandonó: el catálogo lo ganan por volumen los
 registries grandes y lo absorben los propios vendors. Si encontrás código de búsqueda en GitHub,
-favoritos, recomendador por palabras clave o UI de kits, es residuo — está en `src/legacy/` o
-pendiente de borrar, y **no se extiende**.
+favoritos, recomendador por palabras clave o UI de kits, es residuo: se borra, no se extiende.
+`src/legacy/` ya no existe — vivía ahí y se eliminó en la fase 0-A. Si `build` alguna vez se
+activa, el `applyPlan` que necesita se recupera del historial de git.
 
 ## Los objetos universales
 
@@ -171,7 +172,6 @@ src/import.js           observación -> contrato
 src/verify.js           contrato vs. disco, con exit codes para CI
 src/registry/           mapa capability -> providers
 src/fs/                 utilidades de disco seguras
-src/legacy/             recomendador viejo, degradado a opcional
 docs/implementation-plan.md  orden vigente, puertas de salida y puntos de decisión
 docs/landscape.md       qué herramientas existen afuera y en qué se diferencia pactlock
 docs/adr/               decisiones cerradas (0001: el nombre pactlock)
@@ -204,9 +204,9 @@ npm run doctor        # auditar el entorno de este repo
 npm run docs          # regenerar CLAUDE.md y AGENTS.md desde el brief
 ```
 
-El proyecto vive en `C:\Proyectos GRANDES\SyntaX\SyntaX`, **fuera de OneDrive** a
-propósito: dentro de OneDrive la sincronización rompía `npm install`. No moverlo ni
-sugerir moverlo ahí.
+El checkout vive **fuera de OneDrive** a propósito: adentro, la sincronización rompía
+`npm install`. No moverlo ahí ni sugerirlo. La ruta exacta no se escribe acá: es de cada
+máquina, y este archivo lo lee todo el equipo.
 
 Este repo declara su propio entorno en `pactlock.yaml` y es el caso de prueba de `doctor`.
 Si cambiás skills o MCP servers acá, corré `npm run doctor` y fijate que el reporte siga

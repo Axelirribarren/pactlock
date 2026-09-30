@@ -28,6 +28,7 @@ faltaba era el 77% del total. Lo que queda:
 | vigilar | **La versión de protocolo MCP está fija en `2025-06-18`.** | Un server que solo hable una versión distinta puede rechazar el handshake y aparecer como caído sin serlo. Hay que probar contra servers viejos antes de confiar en ese diagnóstico. |
 | vigilar | **`--deep` ejecuta comandos del repo auditado.** Avisa antes y está detrás del flag. | Si algún día `verify` corre en CI con `--deep`, eso significa ejecutar el `.mcp.json` de cada PR. Decisión de seguridad que hay que tomar a conciencia, no heredar por comodidad. |
 | vigilar | **Runtime detectado pero vacío da un reporte inútil**: `sin objetos · ≈0 tokens · Sin hallazgos`. | Visto en un proyecto real. Debería decir por qué (`.claude/` existe pero no tiene skills ni MCP). |
+| corregido 2026-09-27 | **Codex sí tiene config MCP de proyecto.** Se afirmaba (README, `supports` del adapter, test) que era solo de usuario. Codex carga `.codex/config.toml` del proyecto si el proyecto está marcado como confiable, y le suma la config de usuario. Corregidos el `supports`, el test y la prosa del README; la salida de ejemplo del README se recaptura en la fase 1. | Un hallazgo falso publicado destruye la credibilidad del reporte. Lección: cada afirmación sobre un runtime lleva fecha y fuente en `landscape.md`, porque los runtimes cambian rápido. |
 | vigilar | **Sin check de permisos.** El objeto `permission` se lee pero nadie lo evalúa. | Un `allow` amplio junto a MCPs con capacidad de escritura es el hallazgo con consecuencias de seguridad, y es de los pocos que nadie más va a mostrar. |
 | vigilar | **Exit code siempre 0.** | Deliberado hasta que exista `verify --strict`. Anotado para que nadie lo "arregle" antes de tiempo. |
 | vigilar | **Los fixtures de test viven en `fixtures/`, fuera de `test/`.** | El runner de Node ejecuta *todo* lo que hay bajo `test/`, así que un fixture que espera stdin cuelga la suite entera. Ya pasó una vez. Si alguien agrega fixtures, van en `fixtures/`. |
@@ -112,15 +113,16 @@ costo es por target. El número real de Claude Code es ≈14.887 y el de Codex �
 | vigilar | **La evidencia multiplataforma recién existe cuando CI corra.** Está el workflow y está `scripts/report-eol.mjs`, que dice qué finales de línea recibió cada runner en vez de suponerlos. | Hasta el primer verde en las tres plataformas, el determinismo del digest sigue siendo una promesa. En esta máquina Windows el checkout llega con CRLF y `verify` pasa, así que hay evidencia parcial. |
 | vigilar | **Una extensión nueva en la allowlist del digest cambia los digests de ese formato.** | Exige bump del nombre del algoritmo y actualizar los vectores de `docs/digest.md`. Está escrito allá, pero es fácil de pasar por alto en un PR chico. |
 
-## Legacy
+## Legacy — cerrado el 2026-09-29
 
 **`src/legacy/` no tenía fecha de vencimiento.** Su condición de borrado era que `build` portara
 el `applyPlan` de `apply-plan.mjs`, pero `build` ahora es condicional, así que esa condición podía
-no cumplirse nunca. **Decidido (2026-09-23):** se borra en la fase 0; queda en el historial de git
-y, si la rama de compilación se activa, se porta desde ahí.
+no cumplirse nunca. **Decidido (2026-09-23) y hecho (2026-09-29):** borrado en la fase 0-A.
 
-Además **legacy quedó sin tests**: se recortaron al migrar. Es deliberado —no se extiende— pero
-significa que si alguien lo toca, nada lo detecta.
+Nada en `src/` lo importaba, así que el borrado no tocó ningún camino de ejecución. Si la rama de
+compilación se activa, `applyPlan` se recupera del historial de git: ahí está la única copia, y es
+a propósito. El módulo tampoco tenía tests —se recortaron al migrar—, así que no había red que
+avisara si alguien lo tocaba; una razón más para no dejarlo.
 
 ## Proceso y equipo
 
@@ -129,6 +131,7 @@ significa que si alguien lo toca, nada lo detecta.
 | vigilar | **CI corre en Node 22 solamente.** `engines` dice `>=20.11`. | O se prueba el piso declarado, o se sube el piso. Hoy la declaración no está respaldada. |
 | vigilar | **La extensibilidad del contrato está sin probar.** Hay dos adapters y los escribió la misma persona el mismo día. | La afirmación "sumar un runtime es barato" recién se verifica cuando alguien más escriba el tercero sin tocar el núcleo. Hasta entonces es una hipótesis de diseño. |
 | vigilar | **El `.mcp.json` de este repo mantiene la colisión de navegador a propósito**, igual que el drift entre `.claude/skills` y `.agents/skills`. | Es el fixture del dogfood. Está anotado en `AGENTS.md` para que nadie lo "arregle" en silencio y nos deje sin caso de demo. |
+| vigilar | **La sección propia de cada runtime en `emit-docs.mjs` es una semilla, no una plantilla.** Solo se escribe cuando el archivo no existe; después, todo lo que está fuera de los marcadores se respeta. Editar el array `specific` no actualiza el `CLAUDE.md` que ya está en disco, y `--check` tampoco lo nota, porque solo compara el bloque entre marcadores. | Pasó el 2026-09-29 con la ruta del proyecto: se editó la semilla, `docs:check` dio verde y el archivo vivo seguía viejo. El paso 6 del ADR 0001 dice "actualizar la ruta en `scripts/emit-docs.mjs`" y por eso es engañoso: hay que tocar los dos. Que lo de afuera sea de la persona es correcto; lo que falta es que la divergencia entre semilla y archivo vivo se vea. |
 
 ## Idioma
 

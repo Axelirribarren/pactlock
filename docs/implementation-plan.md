@@ -138,8 +138,11 @@ El inventario completo y el orden están en el ADR 0001. En resumen:
 7. comprobación final con `grep -ri syntax`: solo quedan la detección de backups viejos y las
    menciones históricas.
 
-**Estado (2026-09-24):** pasos 1 a 5 hechos. Faltan el 6 (usuario) y el 7, que además espera el
-borrado de `src/legacy/` de la fase 0-A: es residuo del producto anterior y todavía dice SyntaX.
+**Estado (2026-09-29):** pasos 1 a 5 hechos, y `src/legacy/` borrado (fase 0-A), que era lo último
+que le faltaba al grep del paso 7. Falta el paso 6, que hace el usuario: renombrar el repo en
+GitHub y mover la carpeta. La ruta que el paso 6 pedía actualizar en `scripts/emit-docs.mjs` ya no
+se escribe: el brief declara la restricción (fuera de OneDrive) sin la ruta absoluta, que es de
+cada máquina.
 
 **Puerta de salida de 0-M:** suite verde, `pactlock verify --strict` limpio sobre este repo, y el
 `grep` final sin residuos.
@@ -150,7 +153,7 @@ borrado de `src/legacy/` de la fase 0-A: es residuo del producto anterior y toda
 - README: nuevo tagline según el foco, quitar lo que describe `build` como existente, y agregar una
   sección breve de "cómo se relaciona con Snyk Agent Scan y los sincronizadores";
 - documentar el flujo canónico y los exit codes de cada comando en un solo lugar;
-- borrar `src/legacy/` (el usuario commitea);
+- ~~borrar `src/legacy/`~~ hecho el 2026-09-29 (el usuario commitea);
 - asignar cada ítem *bloquea* del backlog a una fase de este plan o a la rama condicional.
 
 **Puerta de salida:** el brief, el README, la ayuda de la CLI y el código dicen lo mismo; los
@@ -241,7 +244,9 @@ Se toma unas **8 semanas después de la publicación de la fase 1** y se escribe
   agregado;
 - extender la observación, el schema, `import`, el digest, el lock, `verify` y `accept` a MCP;
 - un parser TOML real para leer Codex (reemplaza la expresión regular);
-- alcance visible: la config de usuario de Codex no viaja con el repo, y el reporte lo dice;
+- alcance visible: Codex suma la config de usuario (no viaja con el repo) y la del proyecto
+  (`.codex/config.toml`, que viaja pero solo carga en proyectos marcados como confiables por cada
+  persona); el reporte dice las dos cosas y no afirma lo que no puede ver;
 - aceptar un MCP nuevo es aceptar una capacidad ejecutable: `accept` interactivo, igual que un
   `unexpected`;
 - tests con credenciales señuelo en todos los artefactos.
@@ -363,8 +368,8 @@ La compilación no forma parte del producto base; tiene su propia definición si
 
 1. ejecutar la migración a pactlock (0-M) siguiendo el ADR 0001, y escribir el resto de los ADRs
    de la fase 0;
-2. corregir el README (tagline, sin `build` como existente, relación con Snyk y los sincronizadores)
-   y borrar `src/legacy/`;
+2. corregir el README (tagline, sin `build` como existente, relación con Snyk y los
+   sincronizadores); `src/legacy/` ya está borrado;
 3. agregar el check de permisos y arreglar el reporte de runtime vacío en `doctor` (solo lectura,
    bajo riesgo, alto valor de demo);
 4. migrar los mensajes de la CLI a claves con inglés por default;

@@ -76,8 +76,8 @@ function costOf(snapshot, probes) {
   }
 
   // Solo los servers de ESTE target. La atribución sale sola de que cada
-  // snapshot trae los suyos: los de Codex viven en la config de usuario y ni
-  // siquiera se leen, así que su costo de MCP no se le imputa a nadie.
+  // snapshot trae los suyos: de Codex solo se leen los del .codex/config.toml
+  // del proyecto; los de la config de usuario no se ven y no se le imputan.
   const servers = snapshot.objects.mcp || []
 
   if (servers.length && !probes) {

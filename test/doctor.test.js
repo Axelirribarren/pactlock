@@ -149,7 +149,9 @@ test('el reporte de pérdida sale del supports declarado, no de código por par'
   const codex = report.loss.find((entry) => entry.target === 'codex')
 
   assert.ok(codex)
-  assert.ok(codex.caveats.some((caveat) => caveat.scope === 'user'))
+  // La config MCP del proyecto viaja, pero Codex solo la carga si cada persona
+  // marcó el proyecto como confiable: el reporte tiene que decirlo.
+  assert.ok(codex.caveats.some((caveat) => caveat.kind === 'mcp' && /confiable/.test(caveat.note)))
 })
 
 test('doctor no escribe nada', () => {

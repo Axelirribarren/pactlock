@@ -6,8 +6,9 @@ sin darse cuenta.
 
 ## La cadena de redistribución
 
-El instalador de SyntaX (el producto anterior, hoy en `src/legacy/`) no redistribuía nada por sí
-mismo: clonaba desde el repo original y la copia ocurría en la máquina del usuario.
+El instalador del producto anterior (SyntaX; el código se borró, queda en el historial de git) no
+redistribuía nada por sí mismo: clonaba desde el repo original y la copia ocurría en la máquina
+del usuario. El análisis sigue vigente porque `build`, si alguna vez existe, hereda el problema.
 
 Pero ese usuario después normalmente commitea `.claude/skills/` o `.agents/skills/` en su propio
 repo. **Ahí sí redistribuye**, y la obligación de licencia pasa a ser suya. La herramienta tiene

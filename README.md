@@ -71,8 +71,14 @@ Two things that report makes visible and nothing else does:
 **74% of Claude Code's startup is two servers doing the same job.** Redundancy stops being a style
 opinion and gets a price tag.
 
-**A team that shares `AGENTS.md` believes it shares an environment, and it doesn't share its MCP
-servers.** Codex's MCP configuration is user-scoped: it never travels with the repo.
+**A team that shares `AGENTS.md` believes it shares an environment, and it may not share its MCP
+servers.** Codex adds each person's user-level MCP servers, which never travel with the repo, to the
+project's `.codex/config.toml`, which does travel but only loads for people who marked the project
+as trusted. Same repo, different agents, and nothing tells you.
+
+> The sample output above was captured before two corrections: the rename to pactlock, and the
+> Codex caveat, which used to say that Codex's MCP config is user-only. It will be re-captured
+> with the English CLI (see `docs/implementation-plan.md`, phase 1).
 
 `--deep` starts each MCP server over stdio and asks for its tool list. Without it, the cost is
 reported as partial and the schemas — the largest slice — as unmeasured. It runs the commands
@@ -234,9 +240,6 @@ converts to CRLF" would be assuming too much.
 - [`docs/digest.md`](docs/digest.md) — digest spec, with test vectors
 - [`docs/direction.md`](docs/direction.md) — why the project stopped being a skill finder
 - [`docs/licensing.md`](docs/licensing.md) — skill licensing and what not to break when copying
-
-`src/legacy/` holds the recommender and installer from the previous product. It is not extended:
-it's there because `build` will port part of that logic.
 
 ## License
 
