@@ -55,10 +55,11 @@ probablemente es derrape. Anotala en `docs/backlog.md` con su motivo en vez de c
 **El producto se llama `pactlock`** (`docs/adr/0001-nombre-pactlock.md`). SyntaX es el nombre
 histórico: se conserva solo en las secciones de historia.
 
-**Estado de la migración:** el código, el binario, los mensajes, los archivos del contrato y el
-algoritmo del digest ya dicen `pactlock` (pasos 1 a 5 del ADR 0001). Faltan el paso 6, que hace
-el usuario (renombrar el repo en GitHub y mover la carpeta), y la comprobación final con `grep`
-del paso 7.
+**Estado de la migración:** pasos 1 a 7 del ADR 0001 hechos (2026-09-29). El código, el binario,
+los mensajes, los archivos del contrato y el algoritmo del digest dicen `pactlock`; el repo se
+renombró en GitHub, la carpeta dejó de estar anidada, y el `grep` final solo encuentra menciones
+deliberadas. Lo único que falta para cerrar la fase 0-M es su puerta de salida:
+`pactlock verify --strict` limpio sobre este repo.
 
 Reglas de la migración:
 

@@ -138,11 +138,14 @@ El inventario completo y el orden están en el ADR 0001. En resumen:
 7. comprobación final con `grep -ri syntax`: solo quedan la detección de backups viejos y las
    menciones históricas.
 
-**Estado (2026-09-29):** pasos 1 a 5 hechos, y `src/legacy/` borrado (fase 0-A), que era lo último
-que le faltaba al grep del paso 7. Falta el paso 6, que hace el usuario: renombrar el repo en
-GitHub y mover la carpeta. La ruta que el paso 6 pedía actualizar en `scripts/emit-docs.mjs` ya no
-se escribe: el brief declara la restricción (fuera de OneDrive) sin la ruta absoluta, que es de
-cada máquina.
+**Estado (2026-09-29):** pasos 1 a 7 hechos. `src/legacy/` borrado (fase 0-A), repo renombrado en
+GitHub y carpeta movida a `pactlock`, sin anidar. La ruta que el paso 6 pedía actualizar en
+`scripts/emit-docs.mjs` ya no se escribe: el brief declara la restricción (fuera de OneDrive) sin
+la ruta absoluta, que es de cada máquina.
+
+**Puerta todavía abierta:** `verify --strict` sale con exit 1. `.agents/skills` tiene las 9
+skills y el contrato declara 3 en codex: 6 `unexpected` y 2 `diverged`. Resolverlo es una
+decisión del usuario (`accept --adopt` o revertir la copia), no limpieza.
 
 **Puerta de salida de 0-M:** suite verde, `pactlock verify --strict` limpio sobre este repo, y el
 `grep` final sin residuos.
